@@ -10,11 +10,7 @@ from homeassistant.components.cover import (
     CoverEntity,
 )
 
-from .const import (
-    DOMAIN as AIRBNK_DOMAIN,
-    AIRBNK_API,
-    AIRBNK_DEVICES,
-)
+from .const import DOMAIN as AIRBNK_DOMAIN, AIRBNK_API, AIRBNK_DEVICES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,9 +42,8 @@ class AirbnkLock(CoverEntity):
         self._api = api
         self._device = device
         self._lock_id = lock_id
-        deviceName = self._device['deviceName']
+        deviceName = self._device["deviceName"]
         self._name = f"{deviceName}"
-        self.status = "OK"
 
     @property
     def supported_features(self):
@@ -59,7 +54,7 @@ class AirbnkLock(CoverEntity):
     @property
     def unique_id(self):
         """Return a unique ID."""
-        devID = self._device['sn']
+        devID = self._device["sn"]
         return f"{devID}"
 
     @property
@@ -70,20 +65,20 @@ class AirbnkLock(CoverEntity):
     @property
     def name(self):
         """Return the name of the lock."""
-        return self._name + " " + self.status
+        return self._name
 
     @property
     def device_info(self):
         """Return a device description for device registry."""
-        devID = self._device['sn']
+        devID = self._device["sn"]
         return {
             "identifiers": {
                 # Serial numbers are unique identifiers within a specific domain
                 (DOMAIN, devID)
             },
             "manufacturer": "Airbnk",
-            "model": self._device['deviceType'],
-            "name": self._device['deviceName'],
+            "model": self._device["deviceType"],
+            "name": self._device["deviceName"],
             "sw_version": self._device["firmwareVersion"],
         }
 
@@ -116,7 +111,6 @@ class AirbnkLock(CoverEntity):
     async def async_open_cover(self, **kwargs):
         """Open the cover."""
         _LOGGER.debug("Launching command to open")
-        self.status = "OK"
         res = "await self._api.operateLock(self._device['sn'], True)"
         sleep(10)
         _LOGGER.debug("res: %s", res)
@@ -125,7 +119,6 @@ class AirbnkLock(CoverEntity):
     async def async_close_cover(self, **kwargs):
         """Close cover."""
         _LOGGER.debug("Launching command to close")
-        self.status = "BAS"
         res = "await self._api.operateLock(self._device['sn'], False)"
         sleep(2)
         _LOGGER.debug("res: %s", res)
