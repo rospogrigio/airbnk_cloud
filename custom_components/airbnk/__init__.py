@@ -30,16 +30,7 @@ MIN_TIME_BETWEEN_UPDATES = datetime.timedelta(seconds=15)
 COMPONENT_TYPES = ["cover"]
 
 
-CONFIG_SCHEMA = vol.Schema(
-    vol.All(
-        {
-            DOMAIN: vol.Schema(
-                {}
-            )
-        }
-    ),
-    extra=vol.ALLOW_EXTRA,
-)
+CONFIG_SCHEMA = vol.Schema(vol.All({DOMAIN: vol.Schema({})}), extra=vol.ALLOW_EXTRA)
 
 
 async def async_setup(hass, config):

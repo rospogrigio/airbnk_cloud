@@ -33,13 +33,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
     """Set up Airbnk climate based on config_entry."""
     locks = []
     for dev_id, device in hass.data[AIRBNK_DOMAIN][AIRBNK_DEVICES].items():
-        _LOGGER.debug("ASE LOCK %s : %s", dev_id, device)
         lock = AirbnkLock(hass.data[AIRBNK_DOMAIN][AIRBNK_API], device, dev_id)
         locks.append(lock)
-
-        # locks = [PRESET_STREAMER]
-        # if device.support_preset_mode(PRESET_STREAMER):
-        #     async_add_entities([AirbnkLock(device, lock) for lock in locks])
     async_add_entities(locks)
 
 
@@ -48,14 +43,12 @@ class AirbnkLock(CoverEntity):
 
     def __init__(self, api, device, lock_id: str):
         """Initialize the zone."""
-        _LOGGER.debug("Creating lock")
         self._api = api
         self._device = device
         self._lock_id = lock_id
         deviceName = self._device['deviceName']
         self._name = f"{deviceName}"
         self.status = "OK"
-        _LOGGER.debug("Created LOCK %s : %s", lock_id, deviceName)
 
     @property
     def supported_features(self):

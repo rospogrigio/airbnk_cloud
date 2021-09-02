@@ -11,17 +11,10 @@ from .const import DOMAIN, CONF_USERID
 _LOGGER = logging.getLogger(__name__)
 
 STEP1_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_EMAIL, default='carletto.pellizzari@gmail.com'): str
-    }
+    {vol.Required(CONF_EMAIL, default="carletto.pellizzari@gmail.com"): str}
 )
 
-STEP2_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_EMAIL): str,
-        vol.Required(CONF_CODE): str
-    }
-)
+STEP2_SCHEMA = vol.Schema({vol.Required(CONF_EMAIL): str, vol.Required(CONF_CODE): str})
 
 
 def schema_defaults(schema, dps_list=None, **defaults):
@@ -76,10 +69,7 @@ class FlowHandler(config_entries.ConfigFlow):
     async def async_step_user(self, user_input=None):
         """User initiated config flow."""
         if user_input is None:
-            return self.async_show_form(
-                step_id="user",
-                data_schema=STEP1_SCHEMA
-            )
+            return self.async_show_form(step_id="user", data_schema=STEP1_SCHEMA)
         return await self.async_step_verify(user_input)
 
     async def async_step_verify(self, user_input=None):
@@ -93,8 +83,7 @@ class FlowHandler(config_entries.ConfigFlow):
             defaults = {}
             defaults.update(user_input or {})
             return self.async_show_form(
-                step_id="verify",
-                data_schema=schema_defaults(STEP2_SCHEMA, **defaults)
+                step_id="verify", data_schema=schema_defaults(STEP2_SCHEMA, **defaults)
             )
         return await self._attempt_connection(
             user_input.get(CONF_EMAIL), user_input.get(CONF_CODE)
