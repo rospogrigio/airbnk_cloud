@@ -8,7 +8,7 @@ import uuid
 from homeassistant.util import Throttle
 from homeassistant.const import CONF_TOKEN
 
-from .const import DOMAIN, AIRBNK_DEVICES, CONF_USERID
+from .const import DOMAIN, AIRBNK_DEVICES, CONF_USERID, CONF_LOCKSTATUS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -92,39 +92,53 @@ class AirbnkApi:
 
     async def operateLock(self, lockSN, isOpen):
         """Get pure Device Data from the Airbnk cloud devices."""
-        _LOGGER.debug("operateLock %s %s.", lockSN, isOpen)
         token = self._config_entry.data[CONF_TOKEN]
         userId = self._config_entry.data[CONF_USERID]
         uuid_str = str(uuid.uuid4())
-        mark = "2" if isOpen else "1"
         gatewaySn = self.devices[lockSN]["gateway"]
+        if isOpen:
+            mark = "2"
+            self.devices[lockSN][CONF_LOCKSTATUS] = "Opening..."
+        else:
+            mark = "1"
+            self.devices[lockSN][CONF_LOCKSTATUS] = "Closing..."
 
         url = AIRBNK_CLOUD_URL + "/api/lock/lockOrUnlockChildDevice"
         url += "?language=" + AIRBNK_LANGUAGE + "&sn=" + gatewaySn
         url += "&userId=" + userId + "&uuid=" + uuid_str + "&version=" + AIRBNK_VERSION
         url += "&mark=" + mark + "&childDeviceSn=" + lockSN + "&token=" + token
-        _LOGGER.info("operateLock url %s.", url)
 
         try:
             func = functools.partial(requests.post, url, headers=AIRBNK_HEADERS)
             res = await self.hass.async_add_executor_job(func)
         except Exception as e:
-            _LOGGER.error("CALL FAILED: %s", e)
-            return "CALL FAILED"
+            msg = "operateLock call failed: " + e
+            _LOGGER.error(msg)
+            self.devices[lockSN][CONF_LOCKSTATUS] = "Failed"
+            return msg
 
         if res.status_code != 200:
-            _LOGGER.error("operateLock failed (%s): %s", res.status_code, res.text)
-            return "operateLock failed : " + str(res.status_code)
+            msg = "operateLock failed (status " + str(res.status_code) + ")"
+            _LOGGER.error(msg)
+            self.devices[lockSN][CONF_LOCKSTATUS] = "Failed ("
+            +str(res.status_code) + ")"
+            return msg
 
         json_data = res.json()
         if json_data["code"] != 200:
-            _LOGGER.error("operateLock failed2 (%s): %s", json_data["code"], res.text)
-            msg = "FAILED: " + json_data["info"] + " (" + str(json_data["code"]) + ")"
+            msg = "operateLock failed: " + json_data["info"]
+            msg += " (code " + str(json_data["code"]) + ")"
             _LOGGER.error("%s", msg)
+            self.devices[lockSN][CONF_LOCKSTATUS] = "Timed out"
             return msg
 
-        _LOGGER.info("operateLock request succeeded: %s", res.text)
-        return ""
+        msg = "operateLock request succeeded (open=" + str(isOpen) + ")"
+        _LOGGER.info("%s", msg)
+        if isOpen:
+            self.devices[lockSN][CONF_LOCKSTATUS] = "Open"
+        else:
+            self.devices[lockSN][CONF_LOCKSTATUS] = "Closed"
+        return msg
 
     async def getCloudDevices(self):
         """Get array of AirbnkResidentialDevice objects and get their data."""
@@ -152,8 +166,7 @@ class AirbnkApi:
             _LOGGER.error("GCD failed2 (%s): %s", json_data["code"], res.text)
             return None
 
-        _LOGGER.info("Token retrieval succeeded (%s): %s", res.status_code, res.text)
-        _LOGGER.info("Token retrieval succeeded.")
+        _LOGGER.debug("GetCloudDevices succeeded (%s): %s", res.status_code, res.text)
 
         res = {}
         for dev_data in json_data["data"] or []:
@@ -161,8 +174,8 @@ class AirbnkApi:
                 _LOGGER.info("Device '%s' is filtered out", dev_data["deviceName"])
             else:
                 res[dev_data["sn"]] = dev_data["deviceName"]
+                dev_data[CONF_LOCKSTATUS] = "Idle"
                 self.devices[dev_data["sn"]] = dev_data
-        _LOGGER.info("Returning res %s", res)
         return self.devices
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)

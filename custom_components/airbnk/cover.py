@@ -1,14 +1,7 @@
 """Support for Airbnk locks."""
 import logging
-import asyncio
-from time import sleep
 
-from homeassistant.components.cover import (
-    DOMAIN,
-    SUPPORT_CLOSE,
-    SUPPORT_OPEN,
-    CoverEntity,
-)
+from homeassistant.components.cover import SUPPORT_CLOSE, SUPPORT_OPEN, CoverEntity
 
 from .const import DOMAIN as AIRBNK_DOMAIN, AIRBNK_API, AIRBNK_DEVICES
 
@@ -74,7 +67,7 @@ class AirbnkLock(CoverEntity):
         return {
             "identifiers": {
                 # Serial numbers are unique identifiers within a specific domain
-                (DOMAIN, devID)
+                (AIRBNK_DOMAIN, devID)
             },
             "manufacturer": "Airbnk",
             "model": self._device["deviceType"],
@@ -102,29 +95,17 @@ class AirbnkLock(CoverEntity):
         """Return if the cover is closed or not."""
         return None
 
-    async def async_stop_after_timeout(self, delay_sec):
-        """Stop the cover if timeout (max movement span) occurred."""
-        await asyncio.sleep(delay_sec)
-        _LOGGER.debug("FATTP!")
-        raise Exception("FATTO!")
-
     async def async_open_cover(self, **kwargs):
         """Open the cover."""
         _LOGGER.debug("Launching command to open")
-        res = "await self._api.operateLock(self._device['sn'], True)"
-        sleep(10)
-        _LOGGER.debug("res: %s", res)
-        self.hass.async_create_task(self.async_stop_after_timeout(2))
+        res = await self._api.operateLock(self._device["sn"], True)
+        raise Exception(res)
 
     async def async_close_cover(self, **kwargs):
         """Close cover."""
         _LOGGER.debug("Launching command to close")
-        res = "await self._api.operateLock(self._device['sn'], False)"
-        sleep(2)
-        _LOGGER.debug("res: %s", res)
-        self.hass.bus.fire("Airbnk", {"wow": "from a Python script!"})
-
-        self.hass.async_create_task(self.async_stop_after_timeout(2))
+        res = await self._api.operateLock(self._device["sn"], False)
+        raise Exception(res)
 
     async def async_stop_cover(self, **kwargs):
         """Stop the cover."""
