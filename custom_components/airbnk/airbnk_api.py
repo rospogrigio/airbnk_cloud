@@ -17,10 +17,7 @@ AIRBNK_LANGUAGE = "2"
 AIRBNK_VERSION = "A_FD_1.8.0"
 MIN_TIME_BETWEEN_UPDATES = datetime.timedelta(seconds=15)
 
-AIRBNK_HEADERS = {
-    "user-agent": "okhttp/3.12.0",
-    "Accept-Encoding": "gzip, deflate",
-}
+AIRBNK_HEADERS = {"user-agent": "okhttp/3.12.0", "Accept-Encoding": "gzip, deflate"}
 
 
 class AirbnkApi:
@@ -56,8 +53,7 @@ class AirbnkApi:
 
         if res.status_code != 200:
             _LOGGER.error(
-                "Verification code request failed (%s): %s",
-                res.status_code, res.text
+                "Verification code request failed (%s): %s", res.status_code, res.text
             )
             return False
 
@@ -87,8 +83,7 @@ class AirbnkApi:
 
         if res_json["code"] != 200:
             _LOGGER.error(
-                "Token retrieval failed2 (%s): %s",
-                res_json["code"], res.text
+                "Token retrieval failed2 (%s): %s", res_json["code"], res.text
             )
             return None
 
@@ -100,12 +95,12 @@ class AirbnkApi:
         token = self._config_entry.data[CONF_TOKEN]
         userId = self._config_entry.data[CONF_USERID]
         uuid_str = str(uuid.uuid4())
-        gatewaySn = self.devices[lockSN]['gateway']
+        gatewaySn = self.devices[lockSN]["gateway"]
         if isOpen:
-            mark = '1'
+            mark = "1"
             self.devices[lockSN][CONF_LOCKSTATUS] = "Opening..."
         else:
-            mark = '2'
+            mark = "2"
             self.devices[lockSN][CONF_LOCKSTATUS] = "Closing..."
 
         url = AIRBNK_CLOUD_URL + "/api/lock/lockOrUnlockChildDevice"
@@ -126,7 +121,7 @@ class AirbnkApi:
             msg = "operateLock failed (status " + str(res.status_code) + ")"
             _LOGGER.error(msg)
             self.devices[lockSN][CONF_LOCKSTATUS] = "Failed ("
-            + str(res.status_code) + ")"
+            +str(res.status_code) + ")"
             return msg
 
         json_data = res.json()
