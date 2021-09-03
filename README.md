@@ -1,6 +1,6 @@
 # Airbnk lock homeassistant integration
 
-Cloud control of Daikin devices that are supported by Airbnk (now WeHere) app.
+Cloud control of Airbnk smart locks that are supported by Airbnk (now WeHere) app.
 
 Supported devices (using the gateway W100):
 - M300
@@ -21,7 +21,7 @@ The integration can be configured in the following way (YAML config files are NO
 
 Start by going to Configuration - Integration and pressing the "+ ADD INTEGRATION" button to create a new Integration, then select "Airbnk lock" in the drop-down menu.
 
-Follow the instructions: in the first dialog, you just have to type the email used in the Daikin Residential App. 
+Follow the instructions: in the first dialog, you just have to type the email used in the Airbnk/WeHere App. 
 
 **_Note: Airbnk cloud allows to have each user logged in only one device. So, if you use the same email used in the Airbnk app, the user on the app will be logged out. As a consequence, it is suggested to create a new user with full permissions with a different email to be used in the HomeAssistant integration._**  
 
