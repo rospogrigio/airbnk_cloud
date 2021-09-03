@@ -99,13 +99,13 @@ class AirbnkLock(CoverEntity):
         """Open the cover."""
         _LOGGER.debug("Launching command to open")
         res = await self._api.operateLock(self._device["sn"], True)
-        raise Exception(res)
+        # raise Exception(res)
 
     async def async_close_cover(self, **kwargs):
         """Close cover."""
         _LOGGER.debug("Launching command to close")
         res = await self._api.operateLock(self._device["sn"], False)
-        raise Exception(res)
+        # raise Exception(res)
 
     async def async_stop_cover(self, **kwargs):
         """Stop the cover."""

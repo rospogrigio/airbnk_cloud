@@ -11,7 +11,7 @@ from .const import DOMAIN, CONF_USERID
 _LOGGER = logging.getLogger(__name__)
 
 STEP1_SCHEMA = vol.Schema(
-    {vol.Required(CONF_EMAIL, default="carletto.pellizzari@gmail.com"): str}
+    {vol.Required(CONF_EMAIL): str}
 )
 
 STEP2_SCHEMA = vol.Schema({vol.Required(CONF_EMAIL): str, vol.Required(CONF_CODE): str})
