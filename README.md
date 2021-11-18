@@ -1,4 +1,4 @@
-# Airbnk lock homeassistant integration
+# Airbnk lock cloud-based HomeAssistant integration
 
 Cloud control of Airbnk smart locks that are supported by Airbnk (now WeHere) app.
 
