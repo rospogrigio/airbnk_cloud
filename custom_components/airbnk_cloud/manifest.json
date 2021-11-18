@@ -1,6 +1,6 @@
 {
   "domain": "airbnk_cloud",
-  "name": "Airbnk lock",
+  "name": "Airbnk lock cloud-based integration",
   "version": "1.0.0",
   "documentation": "https://github.com/rospogrigio/airbnk_cloud/",
   "dependencies": [],
