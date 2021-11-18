@@ -2,12 +2,12 @@
   "domain": "airbnk",
   "name": "Airbnk lock",
   "version": "1.0.0",
-  "documentation": "https://github.com/rospogrigio/airbnk/",
+  "documentation": "https://github.com/rospogrigio/airbnk_cloud/",
   "dependencies": [],
   "codeowners": [
     "@rospogrigio"
   ],
-  "issue_tracker": "https://github.com/rospogrigio/airbnk/issues",
+  "issue_tracker": "https://github.com/rospogrigio/airbnk_cloud/issues",
   "requirements": [
   ],
   "iot_class": "cloud_polling",
