@@ -1,4 +1,4 @@
-"""Support for Airbnk locks."""
+"""Support for Airbnk locks, treated as covers."""
 import logging
 
 from homeassistant.components.cover import SUPPORT_CLOSE, SUPPORT_OPEN, CoverEntity
@@ -19,7 +19,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    """Set up Airbnk climate based on config_entry."""
+    """Set up Airbnk covers based on config_entry."""
     locks = []
     for dev_id, device in hass.data[AIRBNK_DOMAIN][AIRBNK_DEVICES].items():
         lock = AirbnkLock(hass.data[AIRBNK_DOMAIN][AIRBNK_API], device, dev_id)

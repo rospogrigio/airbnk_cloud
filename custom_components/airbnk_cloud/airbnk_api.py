@@ -1,4 +1,4 @@
-"""Platform for the Airbnk AC."""
+"""Platform for the Airbnk cloud-based integration."""
 import datetime
 import functools
 import logging
@@ -141,7 +141,7 @@ class AirbnkApi:
         return msg
 
     async def getCloudDevices(self):
-        """Get array of AirbnkResidentialDevice objects and get their data."""
+        """Get array of AirbnkDevice objects and get their data."""
         _LOGGER.info("getCloudDevices.")
         userId = self._config_entry.data[CONF_USERID]
         token = self._config_entry.data[CONF_TOKEN]

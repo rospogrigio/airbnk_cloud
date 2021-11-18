@@ -19,7 +19,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    """Set up Airbnk climate based on config_entry."""
+    """Set up Airbnk sensors based on config_entry."""
     sensors = []
     for dev_id, device in hass.data[AIRBNK_DOMAIN][AIRBNK_DEVICES].items():
         sensor = AirbnkSensor(hass.data[AIRBNK_DOMAIN][AIRBNK_API], device, dev_id)
