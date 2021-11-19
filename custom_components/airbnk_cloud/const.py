@@ -2,7 +2,7 @@
 
 from homeassistant.const import CONF_TOKEN
 
-DOMAIN = "airbnk"
+DOMAIN = "airbnk_cloud"
 
 CONF_USERID = "userId"
 CONF_TOKENSET = CONF_TOKEN + "set"
