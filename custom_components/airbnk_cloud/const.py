@@ -1,4 +1,4 @@
-"""Constants for Daikin Residential Controller."""
+"""Constants for Airbnk cloud-based integration."""
 
 from homeassistant.const import CONF_TOKEN
 
