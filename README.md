@@ -42,3 +42,6 @@ As a consequence, the Cover entity is used being deemed more suitable, because i
 # Thanks to:
 
 This code is based on @nourmehdi 's great work, in finding a way to sniff the traffic and retrieve the token and understand the API calls to be used.
+
+<a href="https://www.buymeacoffee.com/rospogrigio" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+<a href="https://paypal.me/rospogrigio" target="_blank"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="height: auto !important;width: auto !important;"></a>
